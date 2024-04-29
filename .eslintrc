@@ -1,0 +1,23 @@
+{
+  "root": true,
+  "env": {
+    "browser": true,
+    "commonjs": true
+  },
+  "parser": "@typescript-eslint/parser",
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:@typescript-eslint/recommended"
+  ],
+  "plugins": ["@typescript-eslint"],
+  "parserOptions": { "ecmaVersion": 2018, "sourceType": "module" },
+  "rules": {
+    "linebreak-style": "off",
+    "comma-dangle": "off",
+    "import/no-extraneous-dependencies": "off",
+    "no-plusplus": "off",
+    "no-unused-vars": "error",
+    "@typescript-eslint/no-explicit-any": "warn"
+  }
+}
