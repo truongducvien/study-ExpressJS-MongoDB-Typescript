@@ -100,7 +100,6 @@ const register = async (req: Request, res: Response) => {
     }
 
     const hashedPass = await hashPassword(req.body.password);
-
     const newUser = await User.create({
       ...req.body,
       password: hashedPass

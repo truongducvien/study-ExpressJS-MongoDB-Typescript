@@ -22,6 +22,18 @@ This is a basic NodeJS project that is build for studying purpose
 
 ##
 
+### API endpoints:
+
+| Endpoint          | Method | Headers                     | Payload                | Role  | Description    |
+| ----------------- | ------ | :-------------------------- | ---------------------- | ----- | -------------- |
+| api/users         | GET    | Authorization: Bearer token |                        | Admin | Get list users |
+| api/users         | POST   | Authorization: Bearer token | _(See UserSchemaType)_ | Admin | Create user    |
+| api/users/:userId | GET    | Authorization: Bearer token |                        | Admin | Get user by id |
+| api/users/sign-up | POST   |                             | _(See UserSchemaType)_ |       | Sign up        |
+| api/users/sign-in | POST   |                             | { email, password }    |       | Sign in        |
+
+##
+
 <div style='display: flex; justify-content: center; gap: 20px; flex-wrap: wrap'>
   <a href="https://expressjs.com/" target="_blank">
     <img src="https://expressjs.com/images/express-facebook-share.png" alt="expressjs" title="ExpressJS" min-width="40" height="40"/>
