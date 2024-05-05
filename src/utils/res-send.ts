@@ -1,18 +1,11 @@
+import {
+  ERROR_INTERNAL_SERVER,
+  SUCCESS_CREATE,
+  SUCCESS_DELETE,
+  SUCCESS_GET,
+  SUCCESS_UPDATE
+} from '@/constant';
 import { Response } from 'express';
-// Success status
-const STATUS_GET_SUCCESS = 200;
-const STATUS_CREATE_SUCCESS = 201;
-const STATUS_UPDATE_SUCCESS = 200;
-const STATUS_DELETE_SUCCESS = 200;
-
-// Error status
-const STATUS_INTERNAL_SERVER_ERROR = 500;
-const STATUS_BAD_REQUEST_ERROR = 400;
-
-// Common messages
-const MESSAGE_SUCCESS = 'Success';
-const MESSAGE_ERROR = 'Error';
-const MESSAGE_BAD_REQUEST_ERROR = 'Bad request';
 
 // ===========================  SUCCESS RESPONSE: ===========================
 /**
@@ -28,8 +21,8 @@ const sendSuccess = (
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   config?: { status?: number; data?: any; message?: string }
 ) => {
-  res.status(config.status || STATUS_GET_SUCCESS).json({
-    result: config.message || MESSAGE_SUCCESS,
+  res.status(config.status || SUCCESS_GET.status).json({
+    result: config.message || SUCCESS_GET.message,
     data: config.data || null
   });
 };
@@ -40,8 +33,8 @@ const sendSuccess = (
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const sendGetSuccess = (res: Response, data: any, message?: string) => {
   sendSuccess(res, {
-    status: STATUS_GET_SUCCESS,
-    message: message || MESSAGE_SUCCESS,
+    status: SUCCESS_GET.status,
+    message: message || SUCCESS_GET.message,
     data
   });
 };
@@ -54,8 +47,8 @@ const sendGetSuccess = (res: Response, data: any, message?: string) => {
  */
 const sendPostSuccess = (res: Response, data: any, message?: string) => {
   sendSuccess(res, {
-    status: STATUS_CREATE_SUCCESS,
-    message: message || MESSAGE_SUCCESS,
+    status: SUCCESS_CREATE.status,
+    message: message || SUCCESS_CREATE.message,
     data
   });
 };
@@ -68,8 +61,8 @@ const sendPostSuccess = (res: Response, data: any, message?: string) => {
  */
 const sendPutSuccess = (res: Response, data: any, message?: string) => {
   sendSuccess(res, {
-    status: STATUS_UPDATE_SUCCESS,
-    message: message || MESSAGE_SUCCESS,
+    status: SUCCESS_UPDATE.status,
+    message: message || SUCCESS_UPDATE.message,
     data
   });
 };
@@ -82,8 +75,8 @@ const sendPutSuccess = (res: Response, data: any, message?: string) => {
  */
 const sendDeleteSuccess = (res, message) => {
   sendSuccess(res, {
-    status: STATUS_DELETE_SUCCESS,
-    message: message || MESSAGE_SUCCESS
+    status: SUCCESS_DELETE.status,
+    message: message || SUCCESS_DELETE.message
   });
 };
 
@@ -96,24 +89,13 @@ const sendDeleteSuccess = (res, message) => {
  * @param {string} err.message
  */
 const sendError = (res: Response, err: any) => {
-  const statusCode = err?.status || STATUS_INTERNAL_SERVER_ERROR;
+  const statusCode: number =
+    (err?.status as number) || ERROR_INTERNAL_SERVER.status;
   res.status(statusCode).json({
     error: {
       code: statusCode,
-      message: err?.message || MESSAGE_ERROR
+      message: err?.message || ERROR_INTERNAL_SERVER.message
     }
-  });
-};
-
-/**
- * Send bad request error (400) response to client:
- * @param {any} res Middleware's response
- * @param {string | string[]} message
- */
-const sendBadRequestError = (res: Response, message: string) => {
-  sendError(res, {
-    status: STATUS_BAD_REQUEST_ERROR,
-    message: message || MESSAGE_BAD_REQUEST_ERROR
   });
 };
 
@@ -123,6 +105,5 @@ export {
   sendPostSuccess,
   sendPutSuccess,
   sendDeleteSuccess,
-  sendError,
-  sendBadRequestError
+  sendError
 };

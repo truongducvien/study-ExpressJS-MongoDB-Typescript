@@ -9,12 +9,13 @@ const userSchema = new Schema<UserSchemaType>(
       type: String,
       required: [true, 'name is required, got {VALUE}']
     },
-    age: {
-      type: Number,
-      validate: {
-        validator: (value) => value >= 18,
-        message: 'Age must be at least 18'
-      }
+    email: {
+      type: String,
+      required: [true, 'email is required, got {VALUE}']
+    },
+    password: {
+      type: String,
+      required: [true, 'password is required, got {VALUE}']
     },
     role: {
       type: String,
@@ -22,9 +23,10 @@ const userSchema = new Schema<UserSchemaType>(
       enum: {
         values: ['admin', 'user'],
         message: 'Role must be "admin" or "user"'
-      }
-      // default: 'user'
+      },
+      default: 'user'
     },
+    age: Number,
     isActive: Boolean,
     class: String,
     // address: addressSchema
