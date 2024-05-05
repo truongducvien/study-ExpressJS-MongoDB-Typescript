@@ -1,4 +1,4 @@
-import express, { Request, Response } from 'express';
+import express from 'express';
 import { router } from './router';
 import { dbCore, envConfig } from './config';
 import cookieParser from 'cookie-parser';
