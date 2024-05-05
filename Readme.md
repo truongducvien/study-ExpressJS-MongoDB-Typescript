@@ -2,6 +2,12 @@
 
 This is a basic NodeJS project that is build for studying purpose
 
+### Main features:
+
+1. CRUD
+2. Encrypt password before saving to DB with Bcrypt
+3. Authentication & authorization with JWT
+
 ### Step to run the server:
 
 1. Create MongoDB Atlas database
@@ -23,7 +29,13 @@ This is a basic NodeJS project that is build for studying purpose
   <a href="https://www.mongodb.com/" target="_blank">
     <img src="https://w7.pngwing.com/pngs/956/695/png-transparent-mongodb-original-wordmark-logo-icon-thumbnail.png" alt="MongoDB" title="MongoDB" min-width="40" height="40"/>
   </a>
-   <a href="https://mongoosejs.com/" target="_blank">
+  <a href="https://mongoosejs.com/" target="_blank">
     <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQltfbPnGvdTOlfmF5F-u-SCmW9NoJ5yNybxnAGeckXsg&s" alt="Mongoose" title="Mongoose" min-width="40" height="40"/>
+  </a>
+  <a href="https://jwt.io/" target="_blank">
+    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS4VF0m8nvqLyrkXsLmTOHjlG9drd1qptu9sfnxTl8LaA&s" alt="JWT" title="JWT" min-width="40" height="40"/>
+  </a>
+  <a href="" target="_blank">
+    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRYAsUc7PTA4ShWqqSSHIZkBc7dJf8DbsuMp80CFfiifQ&s" alt="Bcrypt Hash" title="Bcrypt Hash" min-width="40" height="40"/>
   </a>
 </div>

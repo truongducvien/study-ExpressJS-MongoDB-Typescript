@@ -1,3 +1,6 @@
 node_modules
 
 .env
+
+# File test
+index.html

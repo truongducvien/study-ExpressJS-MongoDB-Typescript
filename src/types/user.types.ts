@@ -1,7 +1,10 @@
+import { JwtPayload } from 'jsonwebtoken';
 import { Schema } from 'mongoose';
 
-interface UserSchemaType {
+class UserSchemaType {
   name: string;
+  email: string;
+  password: string;
   age: number;
   role: 'admin' | 'user';
   isActive: boolean;
@@ -11,4 +14,9 @@ interface UserSchemaType {
   address: Schema.Types.ObjectId;
 }
 
-export { UserSchemaType };
+type LogInPayload = Pick<UserSchemaType, 'email' | 'password'>;
+
+type JwtUserPayload = JwtPayload &
+  Pick<UserSchemaType, 'email' | 'password' | 'role'>;
+
+export { UserSchemaType, LogInPayload, JwtUserPayload };
