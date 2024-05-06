@@ -1,4 +1,4 @@
-import { dbCore } from '@/config';
+import { mailTransporter, dbCore, envConfig } from '@/config';
 import { Course, User } from '@/models';
 import {
   BadRequestError,
@@ -8,9 +8,9 @@ import {
 } from '@/types';
 import {
   checkExisted,
-  comparePass,
+  compareKey,
   generateToken,
-  hashPassword,
+  hashKey,
   sendError,
   sendGetSuccess,
   sendPostSuccess
@@ -99,11 +99,21 @@ const register = async (req: Request, res: Response) => {
       throw new BadRequestError('Email has already existed');
     }
 
-    const hashedPass = await hashPassword(req.body.password);
+    const hashedPass = await hashKey(req.body.password);
     const newUser = await User.create({
       ...req.body,
       password: hashedPass
     } as UserSchemaType);
+
+    // Send verification email to user:
+    await mailTransporter.send({
+      to: newUser.email,
+      templateId: envConfig.SENDGRID_VERIFY_MAIL_TEMPLATE_ID,
+      dynamicTemplateData: {
+        name: newUser.name,
+        verification_url: `${envConfig.PUBLIC_FE_URL}/verify.html?userId=${newUser._id}`
+      }
+    });
 
     // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
     const { password, ...rest } = newUser.toJSON();
@@ -126,7 +136,7 @@ const logIn = async (req: Request, res: Response) => {
     const hashedPass = user.password;
 
     // Compare password:
-    const isPasswordMatched = await comparePass(plainPass, hashedPass);
+    const isPasswordMatched = await compareKey(plainPass, hashedPass);
 
     if (!isPasswordMatched) {
       throw new BadRequestError('Password is incorrect');
@@ -139,13 +149,47 @@ const logIn = async (req: Request, res: Response) => {
       role: user.role
     } as JwtUserPayload);
 
-    res.cookie('sessionId', bearerToken, {
-      maxAge: 5 * 60 * 1000
-    });
     sendGetSuccess(res, { user, bearerToken });
   } catch (error) {
     sendError(res, error);
   }
 };
 
-export { getList, create, getById, update, register, logIn };
+const verifyAccount = async (req: Request, res: Response) => {
+  try {
+    const userId = req.params?.userId as string;
+    const user = await User.findById(userId);
+
+    if (user?.isVerified) {
+      throw new BadRequestError('This account has been verified');
+    }
+
+    const updatedUser = await User.updateOne(
+      { _id: userId },
+      { isVerified: true }
+    );
+
+    // Generate JWT:
+    const bearerToken = generateToken({
+      email: user.email,
+      password: user.password,
+      role: user.role
+    } as JwtUserPayload);
+
+    // Send information email to user:
+    await mailTransporter.send({
+      to: user.email,
+      templateId: envConfig.SENDGRID_VERIFY_MAIL_SUCCESS_TEMPLATE_ID,
+      dynamicTemplateData: {
+        name: user.name,
+        page_url: `${envConfig.PUBLIC_FE_URL}?token=${bearerToken}`
+      }
+    });
+    sendGetSuccess(res, { user: updatedUser, bearerToken });
+  } catch (error) {
+    console.log(error);
+    sendError(res, error);
+  }
+};
+
+export { getList, create, getById, update, register, logIn, verifyAccount };
