@@ -41,14 +41,14 @@ PUBLIC_BE_URL=""
 
 ### API endpoints:
 
-| Endpoint           | Method | Headers                     | Payload                | Role  | Description                  |
-| ------------------ | ------ | :-------------------------- | ---------------------- | ----- | ---------------------------- |
-| api/users          | GET    | Authorization: Bearer token |                        | Admin | Get list users               |
-| api/users          | POST   | Authorization: Bearer token | _(See UserSchemaType)_ | Admin | Create user                  |
-| api/users/:userId  | GET    | Authorization: Bearer token |                        | Admin | Get user by id               |
-| api/users/sign-up  | POST   |                             | _(See UserSchemaType)_ |       | Sign up                      |
-| api/users/sign-in  | POST   |                             | { email, password }    |       | Sign in                      |
-| api/verify/:userId | GET    |                             |                        |       | Verify account after sign in |
+| Endpoint                | Method | Headers                     | Payload                | Role  | Description                  |
+| ----------------------- | ------ | :-------------------------- | ---------------------- | ----- | ---------------------------- |
+| api/users               | GET    | Authorization: Bearer token |                        | Admin | Get list users               |
+| api/users               | POST   | Authorization: Bearer token | _(See UserSchemaType)_ | Admin | Create user                  |
+| api/users/:userId       | GET    | Authorization: Bearer token |                        | Admin | Get user by id               |
+| api/auth/sign-up        | POST   |                             | _(See UserSchemaType)_ |       | Sign up                      |
+| api/auth/sign-in        | POST   |                             | { email, password }    |       | Sign in                      |
+| api/auth/verify/:userId | GET    |                             |                        |       | Verify account after sign in |
 
 ### General information:
 
