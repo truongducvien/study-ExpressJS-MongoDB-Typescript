@@ -2,10 +2,7 @@ import {
   create,
   getById,
   getList,
-  logIn,
-  register,
-  update,
-  verifyAccount
+  update
 } from '@/controllers/user.controller';
 import { authGuard } from '@/middlewares';
 import express from 'express';
@@ -20,11 +17,5 @@ userRouter.post('/', authGuard({ roles: ['admin'] }), create);
 userRouter.get('/:userId', authGuard({ roles: ['admin'] }), getById);
 
 userRouter.patch('/:userId', authGuard({ roles: ['admin'] }), update);
-
-userRouter.post('/sign-up', register);
-
-userRouter.post('/sign-in', logIn);
-
-userRouter.get('/verify/:userId', verifyAccount);
 
 export default userRouter;

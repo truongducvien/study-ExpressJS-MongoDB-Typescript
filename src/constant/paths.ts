@@ -1,7 +1,8 @@
 const PATHS = {
   USERS: 'users',
   PRODUCTS: 'products',
-  CARTS: 'carts'
+  CARTS: 'carts',
+  AUTH: 'auth'
 };
 
 export default PATHS;
