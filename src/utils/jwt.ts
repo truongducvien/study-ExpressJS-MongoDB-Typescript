@@ -11,7 +11,8 @@ const verifyToken = (req: Request) => {
   try {
     const bearerToken = req.headers.authorization?.split(' ')[1];
     return jwt.verify(bearerToken, envConfig.SECRET_KEY) as JwtUserPayload;
-  } catch {
+  } catch (e) {
+    console.log(e);
     throw new UnAuthenticatedError('Invalid token');
   }
 };

@@ -8,6 +8,7 @@ class UserSchemaType {
   age: number;
   role: 'admin' | 'user';
   isActive: boolean;
+  isVerified: boolean;
   class: string;
   course: Schema.Types.ObjectId;
   info: Schema.Types.ObjectId;

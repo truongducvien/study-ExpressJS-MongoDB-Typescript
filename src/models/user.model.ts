@@ -28,6 +28,10 @@ const userSchema = new Schema<UserSchemaType>(
     },
     age: Number,
     isActive: Boolean,
+    isVerified: {
+      type: Boolean,
+      default: false
+    },
     class: String,
     // address: addressSchema
     address: {

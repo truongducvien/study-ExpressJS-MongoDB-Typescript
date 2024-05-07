@@ -1,8 +1,12 @@
 import express, { Router } from 'express';
 import { PATHS } from '../constant';
 import userRouter from './user.router';
+import authRouter from './auth.router';
 
-const ROUTER_MAPPING = [[PATHS.USERS, userRouter]];
+const ROUTER_MAPPING = [
+  [PATHS.USERS, userRouter],
+  [PATHS.AUTH, authRouter]
+];
 
 const router = express.Router();
 
