@@ -1,18 +1,18 @@
 import { envConfig } from '@/config';
-import { JwtUserPayload, UnAuthenticatedError } from '@/types';
-import { Request } from 'express';
-import * as jwt from 'jsonwebtoken';
+import { UnAuthenticatedError } from '@/types';
+import { JwtPayload, SignOptions, sign, verify } from 'jsonwebtoken';
 
-const generateToken = (data: object): string => {
-  return jwt.sign(data, envConfig.SECRET_KEY, { expiresIn: 5 * 60 });
+const generateToken = (
+  data: string | object | Buffer,
+  options: SignOptions = { expiresIn: 5 * 60 }
+): string => {
+  return sign(data, envConfig.SECRET_KEY, options);
 };
 
-const verifyToken = (req: Request) => {
+const verifyToken = <T>(token: string = '') => {
   try {
-    const bearerToken = req.headers.authorization?.split(' ')[1];
-    return jwt.verify(bearerToken, envConfig.SECRET_KEY) as JwtUserPayload;
-  } catch (e) {
-    console.log(e);
+    return verify(token, envConfig.SECRET_KEY) as JwtPayload & T;
+  } catch {
     throw new UnAuthenticatedError('Invalid token');
   }
 };
