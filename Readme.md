@@ -7,6 +7,7 @@ This is a basic NodeJS project that is build for studying purpose
 1. CRUD
 2. Encrypt password before saving to DB with Bcrypt
 3. Authentication & authorization with JWT
+4. Authentication with Google through OAuth 2.0 (Using Passport JS)
 
 ### Step to run the server:
 
@@ -78,5 +79,8 @@ Admin email: vien.truong.shop@yopmail.com
   </a>
   <a href="" target="_blank">
     <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRYAsUc7PTA4ShWqqSSHIZkBc7dJf8DbsuMp80CFfiifQ&s" alt="Bcrypt Hash" title="Bcrypt Hash" min-width="40" height="40"/>
+  </a>
+   <a href="" target="_blank">
+    <img src="https://miro.medium.com/v2/resize:fit:1400/1*1uqt6nCd57rb7RyUbeQFjw.png" alt="PassportJS" title="PassportJS" min-width="40" height="40"/>
   </a>
 </div>
