@@ -14,19 +14,25 @@ This is a basic NodeJS project that is build for studying purpose
 2. Create .env file. These are keys that needs to connect with MongoDB server
 
 ```
-PORT=""
+PUBLIC_FE_URL="http://127.0.0.1:5500"
+PUBLIC_API_URL="http://127.0.0.1:3003"
+PORT="3003"
+SECRET_KEY="y6oZwfnQ9D6Zt1xY93Hj4M0nWj96dxoS"
+
+## Database:
 DB_CONNECTION_URI=""
 DB_NAME=""
-SECRET_KEY=""
 
+# Mail sender:
 SENDGRID_VERIFY_KEY=""
 SENDGRID_API_KEY=""
 SENDGRID_VERIFY_MAIL_TEMPLATE_ID=""
 SENDGRID_VERIFY_MAIL_SUCCESS_TEMPLATE_ID=""
 SENDGRID_MAIL_SENDER=""
 
-PUBLIC_FE_URL=""
-PUBLIC_BE_URL=""
+## Google Auth:
+GOOGLE_CLIENT_ID=""
+GOOGLE_CIENT_SECRET=""
 ```
 
 3. Install packages:
@@ -41,14 +47,15 @@ PUBLIC_BE_URL=""
 
 ### API endpoints:
 
-| Endpoint                | Method | Headers                     | Payload                | Role  | Description                  |
-| ----------------------- | ------ | :-------------------------- | ---------------------- | ----- | ---------------------------- |
-| api/users               | GET    | Authorization: Bearer token |                        | Admin | Get list users               |
-| api/users               | POST   | Authorization: Bearer token | _(See UserSchemaType)_ | Admin | Create user                  |
-| api/users/:userId       | GET    | Authorization: Bearer token |                        | Admin | Get user by id               |
-| api/auth/sign-up        | POST   |                             | _(See UserSchemaType)_ |       | Sign up                      |
-| api/auth/sign-in        | POST   |                             | { email, password }    |       | Sign in                      |
-| api/auth/verify/:userId | GET    |                             |                        |       | Verify account after sign in |
+| Endpoint                  | Method | Headers                     | Payload                | Role  | Description                  |
+| ------------------------- | ------ | :-------------------------- | ---------------------- | ----- | ---------------------------- |
+| api/users                 | GET    | Authorization: Bearer token |                        | Admin | Get list users               |
+| api/users                 | POST   | Authorization: Bearer token | _(See UserSchemaType)_ | Admin | Create user                  |
+| api/users/:userId         | GET    | Authorization: Bearer token |                        | Admin | Get user by id               |
+| api/auth/sign-up          | POST   |                             | _(See UserSchemaType)_ |       | Sign up                      |
+| api/auth/sign-in          | POST   |                             | { email, password }    |       | Sign in                      |
+| api/auth/verify/:userId   | GET    |                             |                        |       | Verify account after sign in |
+| api/auth//redirect/verify | POST   | Authorization: Bearer token | {token: verify token}  |       | Verify redirect token        |
 
 ### General information:
 

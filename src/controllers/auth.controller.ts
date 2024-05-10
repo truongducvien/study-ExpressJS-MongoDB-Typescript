@@ -3,7 +3,9 @@ import { User } from '@/models';
 import {
   BadRequestError,
   JwtUserPayload,
+  JwtVerifyEmailPayload,
   LogInPayload,
+  UserGoogleResponse,
   UserSchemaType
 } from '@/types';
 import {
@@ -13,7 +15,8 @@ import {
   hashKey,
   sendError,
   sendGetSuccess,
-  sendPostSuccess
+  sendPostSuccess,
+  verifyToken
 } from '@/utils';
 import { Request, Response } from 'express';
 
@@ -97,12 +100,10 @@ const verifyAccount = async (req: Request, res: Response) => {
       { isVerified: true }
     );
 
-    // Generate JWT:
-    const bearerToken = generateToken({
-      email: user.email,
-      password: user.password,
-      role: user.role
-    } as JwtUserPayload);
+    // Generate a verify token from user's email:
+    const verifyToken = generateToken({
+      email: user.email
+    } as JwtVerifyEmailPayload);
 
     // Send information email to user:
     await mailTransporter.send({
@@ -110,14 +111,71 @@ const verifyAccount = async (req: Request, res: Response) => {
       templateId: envConfig.SENDGRID_VERIFY_MAIL_SUCCESS_TEMPLATE_ID,
       dynamicTemplateData: {
         name: user.name,
-        page_url: `${envConfig.PUBLIC_FE_URL}?token=${bearerToken}`
+        page_url: `${envConfig.PUBLIC_FE_URL}?token=${verifyToken}`
       }
     });
-    sendGetSuccess(res, { user: updatedUser, bearerToken });
+    sendGetSuccess(res, { user: updatedUser });
   } catch (error) {
-    console.log(error);
     sendError(res, error);
   }
 };
 
-export { register, logIn, verifyAccount };
+const handleGoogleRedirect = async (req: Request, res: Response) => {
+  try {
+    const redirectURL = new URL(envConfig.PUBLIC_FE_URL);
+    const userGoogleRes: UserGoogleResponse = req.session['passport'].user;
+
+    // Check exist:
+    const existUser = await checkExisted(User, { googleId: userGoogleRes.id });
+    if (!existUser) {
+      await User.create({
+        name: userGoogleRes.displayName,
+        email: userGoogleRes.emails[0].value,
+        googleId: userGoogleRes.id
+      });
+    }
+    const verifyToken = generateToken(
+      {
+        email: userGoogleRes.emails[0].value
+      },
+      {
+        expiresIn: 60 // 60s
+      }
+    );
+    redirectURL.searchParams.append('token', verifyToken);
+    res.redirect(redirectURL.href);
+  } catch (error) {
+    sendError(res, error);
+  }
+};
+
+const verifyRedirectToken = async (req: Request, res: Response) => {
+  try {
+    const encode = verifyToken<JwtVerifyEmailPayload>(req.body.token);
+    const user = await User.findOne({ email: encode.email });
+
+    if (user) {
+      // Generate access token:
+      const bearerToken = generateToken({
+        email: user.email,
+        password: user.password,
+        role: user.role
+      } as JwtUserPayload);
+
+      sendGetSuccess(res, { user, bearerToken });
+    } else {
+      throw new BadRequestError('Something went wrong');
+    }
+  } catch (error) {
+    console.log({ error });
+    sendError(res, error);
+  }
+};
+
+export {
+  register,
+  logIn,
+  verifyAccount,
+  handleGoogleRedirect,
+  verifyRedirectToken
+};
