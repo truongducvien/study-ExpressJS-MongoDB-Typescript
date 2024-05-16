@@ -10,8 +10,25 @@ const userCollection = db.collection('users');
 
 const getList = async (req: Request, res: Response) => {
   try {
-    const users = await User.find();
-    sendGetSuccess(res, users);
+    // TODO: Create validation middleware for page, limit
+    const page = Number(req.query['page']) || 1;
+    const limit = Number(req.query['limit']) || 10;
+
+    const totalItem = await User.countDocuments();
+    const users = await User.find()
+      .sort({ createdAt: -1 })
+      .limit(limit)
+      .skip((page - 1) * limit);
+
+    sendGetSuccess(res, {
+      metaData: {
+        totalItem,
+        totalPage: Math.ceil(totalItem / limit),
+        page: page || 1,
+        limit: limit || 10
+      },
+      users
+    });
   } catch (error) {
     sendError(res, error);
   }
