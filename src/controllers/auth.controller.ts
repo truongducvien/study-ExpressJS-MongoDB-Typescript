@@ -167,7 +167,6 @@ const verifyRedirectToken = async (req: Request, res: Response) => {
       throw new BadRequestError('Something went wrong');
     }
   } catch (error) {
-    console.log({ error });
     sendError(res, error);
   }
 };
