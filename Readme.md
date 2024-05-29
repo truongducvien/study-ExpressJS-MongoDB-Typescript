@@ -72,6 +72,8 @@ AWS_OBJECT_DOMAIN=""
 
 Admin email: vien.truong.shop@yopmail.com
 
+Demo on Render platform: https://study-expressjs-mongodb-typescript.onrender.com/
+
 ##
 
 <div style='display: flex; justify-content: center; gap: 20px; flex-wrap: wrap'>
