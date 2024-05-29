@@ -10,7 +10,7 @@ import express from 'express';
 const userRouter = express.Router();
 
 // TODO: Add validator middlewares to validate request body and params
-userRouter.get('/', authGuard({ roles: ['admin'] }), getList);
+userRouter.get('/', getList);
 
 userRouter.post('/', authGuard({ roles: ['admin'] }), create);
 
