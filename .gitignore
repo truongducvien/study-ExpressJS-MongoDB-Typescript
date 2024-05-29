@@ -6,3 +6,6 @@ node_modules
 index.html
 verify.html
 pages
+
+# Logger file
+access.log

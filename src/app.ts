@@ -5,9 +5,16 @@ import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import session from 'express-session';
 import passport from 'passport';
+import helmet from 'helmet';
+import { logger } from './middlewares';
 
 const app = express();
 const PORT = envConfig.PORT || 3000;
+
+/**
+ * Secure
+ */
+app.use(helmet());
 
 /**
  * Connect to MongDB
@@ -30,6 +37,9 @@ app.use(
     secret: 'SECRET'
   })
 );
+
+// LOGGER:
+app.use(logger());
 
 // Passport init:
 app.use(passport.initialize());
