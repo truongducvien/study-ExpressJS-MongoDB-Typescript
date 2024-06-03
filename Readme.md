@@ -74,6 +74,8 @@ Admin email: vien.truong.shop@yopmail.com
 
 Demo on Render platform: https://study-expressjs-mongodb-typescript.onrender.com/
 
+Log: All app's log would be record in `access.log` file at the root directory
+
 ##
 
 <div style='display: flex; justify-content: center; gap: 20px; flex-wrap: wrap'>
