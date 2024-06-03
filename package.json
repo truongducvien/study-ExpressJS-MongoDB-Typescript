@@ -5,6 +5,10 @@
   "main": "app.ts",
   "scripts": {
     "start:dev": "nodemon -r tsconfig-paths/register src/app.ts",
+    "startpm2": "pm2 start --interpreter ts-node src/app.ts",
+    "start:prod": "pm2 start --interpreter ts-node src/app.ts",
+    "stop:prod": "pm2 stop src/app.ts",
+    "stop:all": "pm2 stop all",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint . --ext .ts"
   },
@@ -35,7 +39,8 @@
     "multer": "^1.4.5-lts.1",
     "nodemon": "^3.1.0",
     "passport": "^0.7.0",
-    "passport-google-oauth20": "^2.0.0"
+    "passport-google-oauth20": "^2.0.0",
+    "pm2": "^5.4.0"
   },
   "devDependencies": {
     "@types/express": "^4.17.21",
