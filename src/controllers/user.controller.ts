@@ -27,7 +27,6 @@ const getList = async (req: Request, res: Response) => {
         page: page || 1,
         limit: limit || 10
       },
-      testAttr: true,
       users
     });
   } catch (error) {
