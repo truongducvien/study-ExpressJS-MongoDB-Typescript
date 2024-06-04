@@ -3,7 +3,7 @@ module.exports = {
     {
       name: 'study-nodejs-mongodb',
       script: 'src/app.ts',
-      watch: ['server'],
+      watch: true,
       watch_delay: 1000,
       ignore_watch: ['*.log'],
 
