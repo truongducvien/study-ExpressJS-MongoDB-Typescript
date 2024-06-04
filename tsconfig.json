@@ -10,8 +10,6 @@
     }
   },
   "ts-node": {
-    "compilerOptions": {
-      "module": "CommonJS"
-    }
+    "require": ["tsconfig-paths/register"]
   }
 }
