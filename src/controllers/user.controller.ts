@@ -27,8 +27,7 @@ const getList = async (req: Request, res: Response) => {
         page: page || 1,
         limit: limit || 10
       },
-      users,
-      testAttr: true
+      users
     });
   } catch (error) {
     sendError(res, error);
