@@ -1,4 +1,5 @@
 export * from './res-send';
-export * from './password';
+export * from './keyHashing';
 export * from './jwt';
 export { default as checkExisted } from './checkExist';
+export * from './aws-s3';

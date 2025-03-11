@@ -3,6 +3,7 @@ import { Schema, model } from 'mongoose';
 
 export { default as User } from './user.model';
 
+// TODO: Handle all validation bellow in a validation middleware
 const userSchema = new Schema<UserSchemaType>(
   {
     name: {
@@ -14,8 +15,8 @@ const userSchema = new Schema<UserSchemaType>(
       required: [true, 'email is required, got {VALUE}']
     },
     password: {
-      type: String,
-      required: [true, 'password is required, got {VALUE}']
+      type: String
+      // required: [true, 'password is required, got {VALUE}']
     },
     role: {
       type: String,
@@ -28,6 +29,10 @@ const userSchema = new Schema<UserSchemaType>(
     },
     age: Number,
     isActive: Boolean,
+    isVerified: {
+      type: Boolean,
+      default: false
+    },
     class: String,
     // address: addressSchema
     address: {
@@ -45,7 +50,8 @@ const userSchema = new Schema<UserSchemaType>(
       ref: function () {
         return this.role === 'admin' ? 'AdminInfo' : 'UserInfo';
       }
-    }
+    },
+    googleId: String
     // adminInfoModel: {
     //   type: String,
     //   enum: ['AdminInfo']

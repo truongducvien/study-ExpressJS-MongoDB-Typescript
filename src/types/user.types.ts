@@ -1,4 +1,3 @@
-import { JwtPayload } from 'jsonwebtoken';
 import { Schema } from 'mongoose';
 
 class UserSchemaType {
@@ -8,15 +7,29 @@ class UserSchemaType {
   age: number;
   role: 'admin' | 'user';
   isActive: boolean;
+  isVerified: boolean;
   class: string;
   course: Schema.Types.ObjectId;
   info: Schema.Types.ObjectId;
   address: Schema.Types.ObjectId;
+  googleId?: string;
+}
+class UserGoogleResponse {
+  id: string;
+  displayName: string;
+  emails: { value: string; verified: boolean }[];
 }
 
 type LogInPayload = Pick<UserSchemaType, 'email' | 'password'>;
 
-type JwtUserPayload = JwtPayload &
-  Pick<UserSchemaType, 'email' | 'password' | 'role'>;
+type JwtUserPayload = Pick<UserSchemaType, 'email' | 'password' | 'role'>;
 
-export { UserSchemaType, LogInPayload, JwtUserPayload };
+type JwtVerifyEmailPayload = { email: string };
+
+export {
+  UserSchemaType,
+  UserGoogleResponse,
+  LogInPayload,
+  JwtUserPayload,
+  JwtVerifyEmailPayload
+};

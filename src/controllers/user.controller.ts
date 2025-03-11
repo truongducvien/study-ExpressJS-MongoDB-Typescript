@@ -1,20 +1,6 @@
 import { dbCore } from '@/config';
 import { Course, User } from '@/models';
-import {
-  BadRequestError,
-  JwtUserPayload,
-  LogInPayload,
-  UserSchemaType
-} from '@/types';
-import {
-  checkExisted,
-  comparePass,
-  generateToken,
-  hashPassword,
-  sendError,
-  sendGetSuccess,
-  sendPostSuccess
-} from '@/utils';
+import { sendError, sendGetSuccess, sendPostSuccess } from '@/utils';
 import { Request, Response } from 'express';
 import { ObjectId } from 'mongodb';
 import { startSession } from 'mongoose';
@@ -24,8 +10,25 @@ const userCollection = db.collection('users');
 
 const getList = async (req: Request, res: Response) => {
   try {
-    const users = await User.find();
-    sendGetSuccess(res, users);
+    // TODO: Create validation middleware for page, limit
+    const page = Number(req.query['page']) || 1;
+    const limit = Number(req.query['limit']) || 10;
+
+    const totalItem = await User.countDocuments();
+    const users = await User.find()
+      .sort({ createdAt: -1 })
+      .limit(limit)
+      .skip((page - 1) * limit);
+
+    sendGetSuccess(res, {
+      metaData: {
+        totalItem,
+        totalPage: Math.ceil(totalItem / limit),
+        page: page || 1,
+        limit: limit || 10
+      },
+      users
+    });
   } catch (error) {
     sendError(res, error);
   }
@@ -89,64 +92,4 @@ const update = async (req: Request, res: Response) => {
   }
 };
 
-const register = async (req: Request, res: Response) => {
-  try {
-    const isMailExisted = await checkExisted<UserSchemaType>(User, {
-      email: req.body.email
-    });
-
-    if (isMailExisted) {
-      throw new BadRequestError('Email has already existed');
-    }
-
-    const hashedPass = await hashPassword(req.body.password);
-
-    const newUser = await User.create({
-      ...req.body,
-      password: hashedPass
-    } as UserSchemaType);
-
-    // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
-    const { password, ...rest } = newUser.toJSON();
-    sendPostSuccess(res, rest);
-  } catch (error) {
-    sendError(res, error);
-  }
-};
-
-const logIn = async (req: Request, res: Response) => {
-  try {
-    const payload = req.body as LogInPayload;
-    const user = (await User.findOne({ email: payload.email }))?.toJSON();
-
-    if (!user) {
-      throw new BadRequestError('This email has not been registered');
-    }
-
-    const plainPass = payload.password;
-    const hashedPass = user.password;
-
-    // Compare password:
-    const isPasswordMatched = await comparePass(plainPass, hashedPass);
-
-    if (!isPasswordMatched) {
-      throw new BadRequestError('Password is incorrect');
-    }
-
-    // Generate JWT:
-    const bearerToken = generateToken({
-      email: user.email,
-      password: hashedPass,
-      role: user.role
-    } as JwtUserPayload);
-
-    res.cookie('sessionId', bearerToken, {
-      maxAge: 5 * 60 * 1000
-    });
-    sendGetSuccess(res, { user, bearerToken });
-  } catch (error) {
-    sendError(res, error);
-  }
-};
-
-export { getList, create, getById, update, register, logIn };
+export { getList, create, getById, update };

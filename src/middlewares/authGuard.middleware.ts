@@ -1,4 +1,4 @@
-import { UnAuthorizedError, UserSchemaType } from '@/types';
+import { JwtUserPayload, UnAuthorizedError, UserSchemaType } from '@/types';
 import { sendError, verifyToken } from '@/utils';
 import { NextFunction, Request, Response } from 'express';
 
@@ -18,7 +18,8 @@ const authGuard =
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const accessibleRoles = data?.roles;
-      const encoded = verifyToken(req);
+      const accessToken = req.headers['authorization'].split(' ')[1];
+      const encoded = verifyToken<JwtUserPayload>(accessToken);
       const canAccess =
         encoded.role === 'admin' ||
         !accessibleRoles?.length ||
